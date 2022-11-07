@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="soapflo-suite.xml" />
+	<munit:test name="soapfloFlow-test" doc:id="7bc71f20-59fa-4ad0-9692-2ac3a5b49ba6" ignore="true">
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="4ab15180-0813-4dca-b179-b4f0b0ac58c6" >
+				<munit:payload value="#[readUrl('classpath://soapfloFlowtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://soapfloFlowtest\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to soapfloFlow" doc:id="5fea9a53-d23f-4209-ae59-7e875b5a375f" name="soapfloFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="8f556d6f-4d53-4991-b086-a7964eec9e02" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import soapfloFlowtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="soapfloFlow-test1" doc:id="3b052ca9-9852-4009-a605-80abbfa3de6e" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="8e1f9204-4994-452f-a56e-6faf63b8cf57" >
+				<munit:payload value="#[readUrl('classpath://soapfloFlowtest1\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://soapfloFlowtest1\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to soapfloFlow" doc:id="3fdad776-0fe7-4bf2-b5d4-d0bdf9239397" name="soapfloFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="0bf4a2a9-8e51-437a-97d1-c5ffdf12fba6" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import soapfloFlowtest1::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>
